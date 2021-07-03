@@ -48,7 +48,7 @@ class CheckNotifications extends Command
             foreach ($rzdResponse as $item) {
                 if ($item->number === $redisData->number) {
                     $this->info('Есть места!');
-                    Sms::send(env('PHONE'), 'Test');
+                    Sms::send(env('PHONE'), 'TEST ' . $item->number . ' ' . $item->time0);
                     Redis::del($redisKey);
                 }
             }
