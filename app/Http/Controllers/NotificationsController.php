@@ -12,6 +12,7 @@ class NotificationsController extends Controller
     {
         $request->validate([
             'number' => ['required'],
+            'from' => ['required', 'enum_key:' . Destination::class],
             'to' => ['required', 'enum_key:' . Destination::class],
             'date' => ['required', 'date_format:Y-m-d'],
             'hours' => ['required', 'numeric'],

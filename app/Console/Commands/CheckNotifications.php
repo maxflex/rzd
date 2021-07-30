@@ -44,7 +44,7 @@ class CheckNotifications extends Command
         foreach ($keys as $key) {
             $redisKey = str_replace(config('database.redis.options.prefix'), '', $key);
             $redisData = json_decode(Redis::get($redisKey));
-            $rzdResponse = Rzd::get($redisData->date, $redisData->to);
+            $rzdResponse = Rzd::get($redisData->date, $redisData->from, $redisData->to);
             foreach ($rzdResponse as $item) {
                 if ($item->number === $redisData->number) {
                     $this->info('Есть места!');

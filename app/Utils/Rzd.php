@@ -8,10 +8,13 @@ use Rzd\Api;
 
 class Rzd
 {
-    public static function get($date, $to)
+    public static function get($date, $from, $to)
     {
         $api = new Api();
 
+        if (in_array($from, Destination::getKeys())) {
+            $from = Destination::getValue($from);
+        }
         if (in_array($to, Destination::getKeys())) {
             $to = Destination::getValue($to);
         }
@@ -23,7 +26,7 @@ class Rzd
             // 'withoutSeats' => 'y', // Если checkSeats = 0, то этот параметр тоже необходим
             // Коды станций можно получить отдельным запросом
             // https://pass.rzd.ru/suggester?compactMode=y&stationNamePart=БЕЛГОРОД
-            'code0'        => $to === Destination::bel ? Destination::mos : Destination::bel, // код станции отправления
+            'code0'        => $from, // код станции отправления
             'code1'        => $to, // код станции прибытия
             'dt0'          => (new DateTime($date))->format('d.m.Y'),
             'md'           => 0, // 0 - без пересадок, 1 - с пересадками
