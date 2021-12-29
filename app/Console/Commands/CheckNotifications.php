@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Utils\Sms;
-use App\Utils\Rzd;
+use App\Enums\CarType;
+use App\Utils\{Sms, Rzd};
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 
@@ -47,7 +47,15 @@ class CheckNotifications extends Command
             $rzdResponse = Rzd::get($redisData->date, $redisData->from, $redisData->to);
             foreach ($rzdResponse as $item) {
                 if ($item->number === $redisData->number) {
+                    // проверяем тип вагона
+                    if (isset($redisData->type)) {
+                        $type = CarType::getValue($redisData->type);
+                        if (array_search($type, array_column($item->cars, 'itype')) === false) {
+                            continue;
+                        }
+                    }
                     $this->info('Есть места!');
+                    dump($item);
                     Sms::send(env('PHONE'), 'TEST ' . $item->number . ' ' . $item->time0);
                     Redis::del($redisKey);
                 }
