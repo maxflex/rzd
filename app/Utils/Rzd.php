@@ -32,6 +32,6 @@ class Rzd
             'md'           => 0, // 0 - без пересадок, 1 - с пересадками
         ];
 
-        return json_decode($api->trainRoutes($params));
+        return $api->trainRoutes($params);
     }
 }

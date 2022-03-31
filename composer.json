@@ -13,7 +13,7 @@
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5",
         "predis/predis": "^1.1",
-        "visavi/rzd-api": "^2.4"
+        "visavi/rzd-api": "^3.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
