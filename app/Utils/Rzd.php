@@ -4,6 +4,7 @@ namespace App\Utils;
 
 use App\Enums\Destination;
 use DateTime;
+use Illuminate\Support\Facades\Http;
 use Rzd\Api;
 
 class Rzd
@@ -33,5 +34,24 @@ class Rzd
         ];
 
         return $api->trainRoutes($params);
+    }
+
+    public static function getSeats($item)
+    {
+        $response = Http::post('https://ticket.rzd.ru/api/v1/railway/carpricing/lite', [
+            'DepartureDate' => date('Y-m-d H:i:s', strtotime("{$item->date0} {$item->time0}")),
+            'OriginCode' => $item->code0,
+            'DestinationCode' => $item->code1,
+            'TrainNumber' => $item->number,
+            'SpecialPlacesDemand' => 'NoValue',
+        ]);
+
+        $data = $response->json();
+
+        if (isset($data['Code'])) {
+            throw new \Exception($data['Message']);
+        }
+
+        return collect($data);
     }
 }

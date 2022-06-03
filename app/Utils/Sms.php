@@ -9,8 +9,11 @@ use GuzzleHttp\Client;
  */
 class Sms
 {
-    public static function send(string $number, string $text): array
+    public static function send(string $number, string $text)
     {
+        if (app()->environment('local')) {
+            return logger("SMS to {$number}: {$text}");
+        }
         $email = config('services.sms-aero.email');
         $apiKey = config('services.sms-aero.api_key');
         $signature = config('services.sms-aero.signature');
